@@ -255,6 +255,14 @@ func writeHeader(req, forwardReq *http.Request, trustForwardHeader bool, allowed
 	default:
 		forwardReq.Header.Del(xForwardedURI)
 	}
+
+	jpCFIP := req.Header.Get("Cf-Connecting-IP")
+	switch {
+	case jpCFIP != "":
+		forwardReq.Header.Set("Cf-Connecting-IP", jpCFIP)
+	default:
+		forwardReq.Header.Del("Cf-Connecting-IP")
+	}
 }
 
 func filterForwardRequestHeaders(forwardRequestHeaders http.Header, allowedHeaders []string) http.Header {
